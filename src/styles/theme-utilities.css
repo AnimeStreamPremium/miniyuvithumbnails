@@ -1,0 +1,6 @@
+/* Utilities for the theme */
+@layer utilities {
+  .surface-gradient { background-image: var(--gradient-surface); }
+  .shadow-elevated { box-shadow: var(--shadow-elevated); }
+  .smooth { transition: var(--transition-smooth); }
+}
