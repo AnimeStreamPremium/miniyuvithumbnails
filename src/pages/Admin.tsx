@@ -17,7 +17,14 @@ export default function Admin() {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       const { error } = await supabase.auth.signInAnonymously();
-      if (error) toast.error("Auth error. Please try again.");
+      if (error) {
+        const msg = (error as any)?.message || "Auth error";
+        if (msg.toLowerCase().includes("anonymous sign-ins are disabled")) {
+          toast.error("Anonymous sign-in is disabled in Supabase. Enable it or ask me to add email/password login.");
+        } else {
+          toast.error("Auth error. Please try again.");
+        }
+      }
     }
   };
 
