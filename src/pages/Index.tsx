@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-banner.webp";
-import { Link } from "react-router-dom";
+
 import { supabase } from "@/integrations/supabase/client";
 
 export default function Index() {
@@ -134,11 +134,6 @@ export default function Index() {
                 <Button className="w-full" variant="secondary">Go Pro</Button>
               </div>
             </article>
-          </div>
-          <div className="mt-10 text-center">
-            <Link to="/admin">
-              <Button variant="outline">Admin: Upload New Work</Button>
-            </Link>
           </div>
         </div>
       </section>

@@ -6,9 +6,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
+import Cookies from "./pages/Cookies";
 
 const queryClient = new QueryClient();
 
