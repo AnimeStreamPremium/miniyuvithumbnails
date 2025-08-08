@@ -2,12 +2,26 @@ import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-banner.webp";
-import gaming1 from "@/assets/gallery-gaming-1.webp";
-import general1 from "@/assets/gallery-general-1.webp";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Index() {
   const canonical = useMemo(() => window.location.origin + "/", []);
+  const [thumbnails, setThumbnails] = useState<Array<{ id: string; title: string | null; image_url: string }>>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const { data, error } = await supabase
+        .from("thumbnails")
+        .select("id,title,image_url")
+        .eq("is_published", true)
+        .order("created_at", { ascending: false });
+      if (!error && data) setThumbnails(data);
+      setLoading(false);
+    }
+    load();
+  }, []);
 
   return (
     <main>
@@ -57,11 +71,24 @@ export default function Index() {
         <div className="container mx-auto py-14">
           <h2 className="text-2xl font-semibold">Selected Work</h2>
           <p className="text-muted-foreground mt-2">Gaming and tutorial styles in a clean grayscale aesthetic.</p>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <img src={gaming1} loading="lazy" alt="Grayscale gaming thumbnail mockup with gamepad and bold shapes" className="w-full rounded-lg border shadow-sm" />
-            <img src={general1} loading="lazy" alt="Grayscale tutorial thumbnail mockup with panels and cursor" className="w-full rounded-lg border shadow-sm" />
-            <img src={gaming1} loading="lazy" alt="Grayscale gaming thumbnail mockup variant" className="w-full rounded-lg border shadow-sm" />
-          </div>
+          {loading ? (
+            <p className="text-muted-foreground">Loading your latest thumbnails…</p>
+          ) : thumbnails.length === 0 ? (
+            <p className="text-muted-foreground">No thumbnails yet. Upload from the Admin panel.</p>
+          ) : (
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {thumbnails.map((t) => (
+                <img
+                  key={t.id}
+                  src={t.image_url}
+                  loading="lazy"
+                  alt={`${t.title ?? 'Thumbnail'} by Shivam - YouTube thumbnail designer`}
+                  className="w-full rounded-lg border shadow-sm"
+                />
+              ))}
+            </div>
+          )}
+
         </div>
       </section>
 
